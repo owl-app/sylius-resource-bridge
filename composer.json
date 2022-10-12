@@ -1,0 +1,23 @@
+{
+    "name": "owl/sylius-resource-bridge",
+    "type": "symfony-bridge",
+    "authors": [
+        {
+            "name": "Paweł Kęska",
+            "email": "projekty@pawelkeska.eu"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "sylius/resource": "^1.9",
+        "sylius/resource-bundle": "^1.9"
+    },
+    "require-dev": {
+
+    },
+    "autoload": {
+        "psr-4": {
+            "Owl\\Bridge\\SyliusResource\\": "/"
+        }
+    }
+}
