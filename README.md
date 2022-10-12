@@ -1,7 +1,7 @@
 SyliusResourceBridge
 =====================
 
-Provides integration for Sylius Resource with various Owl application components
+Provides integration for Sylius Resource with various Owl application components.
 
 Authors
 -------
