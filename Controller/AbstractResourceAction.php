@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Owl\Bridge\SyliusResourceBridge\Controller;
+namespace Owl\Bridge\SyliusResource\Controller;
 
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -10,8 +10,8 @@ use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Owl\Bridge\SyliusResourceBridge\Controller\AuthorizationCheckerInterface;
-use Owl\Bridge\SyliusResourceBridge\Exception\InvalidResponseException;
+use Owl\Bridge\SyliusResource\Controller\AuthorizationCheckerInterface;
+use Owl\Bridge\SyliusResource\Exception\InvalidResponseException;
 use Sylius\Bundle\ResourceBundle\Controller\ControllerTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Form\FormInterface;

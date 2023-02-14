@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Owl\Bridge\SyliusResourceBridge\Controller;
+namespace Owl\Bridge\SyliusResource\Controller;
 
 use Doctrine\Persistence\ObjectManager;
 use FOS\RestBundle\View\View;
-use Owl\Bridge\SyliusResourceBridge\Exception\InvalidResponseException;
+use Owl\Bridge\SyliusResource\Exception\InvalidResponseException;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
 use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration as SyliusRequestConfiguration;
@@ -57,7 +57,7 @@ class BaseController extends ResourceController
         EventDispatcherInterface $eventDispatcher,
         ?StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
-        ResourceDeleteHandlerInterface $resourceDeleteHandler
+        ResourceDeleteHandlerInterface $resourceDeleteHandler,
     ) { 
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
@@ -83,6 +83,8 @@ class BaseController extends ResourceController
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $resource = $this->findOr404($configuration);
+        $resourceParents = $this->findParents($configuration);
+
         $this->isGrantedOr403($configuration, ResourceActions::SHOW, $resource);
 
         $this->eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource);
@@ -93,6 +95,7 @@ class BaseController extends ResourceController
                 'metadata' => $this->metadata,
                 'resource' => $resource,
                 $this->metadata->getName() => $resource,
+                'resourceParents' => $resourceParents
             ]);
         }
 
@@ -103,7 +106,9 @@ class BaseController extends ResourceController
     {
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
-        $newResource = $this->newResourceFactory->create($configuration, $this->factory);
+        $resourceParents = $this->findParents($configuration);
+        $newResource = $this->newResourceFactory->create($configuration, $this->factory, $resourceParents);
+
         $this->isGrantedOr403($configuration, ResourceActions::CREATE);
 
         $form = $this->resourceFormFactory->create($configuration, $newResource);
@@ -183,6 +188,7 @@ class BaseController extends ResourceController
             'resource' => $newResource,
             $this->metadata->getName() => $newResource,
             'form' => $form->createView(),
+            'resourceParents' => $resourceParents
         ]);
     }
 
@@ -191,6 +197,8 @@ class BaseController extends ResourceController
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         $resource = $this->findOr404($configuration);
+        $resourceParents = $this->findParents($configuration);
+
         $this->isGrantedOr403($configuration, ResourceActions::UPDATE, $resource);
 
         $form = $this->resourceFormFactory->create($configuration, $resource);
@@ -283,6 +291,7 @@ class BaseController extends ResourceController
             'resource' => $resource,
             $this->metadata->getName() => $resource,
             'form' => $form->createView(),
+            'resourceParents' => $resourceParents
         ]);
     }
 
@@ -401,5 +410,17 @@ class BaseController extends ResourceController
         if (!$this->authorizationChecker->isGranted($configuration, $resource)) {
             throw new AccessDeniedException();
         }
+    }
+
+    protected function findParents(RequestConfiguration $configuration): array
+    {
+        if (!$this->container->has('owl.resource_controller.parent_single_resource_provider')) {
+            throw new \LogicException(sprintf(
+                'The %s is not registered in your application.',
+                'owl.resource_controller.parent_single_resource_provider'
+            ));
+        }
+
+        return $this->container->get('owl.resource_controller.parent_single_resource_provider')->get($configuration);
     }
 }

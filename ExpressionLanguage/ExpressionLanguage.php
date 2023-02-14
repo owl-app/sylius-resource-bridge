@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Owl\Bridge\SyliusResourceBridge\ExpressionLanguage;
+namespace Owl\Bridge\SyliusResource\ExpressionLanguage;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Sylius\Bundle\ResourceBundle\ExpressionLanguage\NotNullExpressionFunctionProvider;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Owl\Bridge\SyliusResourceBridge\Controller;
+namespace Owl\Bridge\SyliusResource\Controller;
 
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface as SyliusEventDispatcherInterface;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Owl\Bridge\SyliusResourceBridge\Controller;
+namespace Owl\Bridge\SyliusResource\Controller;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration as SyliusRequestConfiguration;
 
@@ -80,5 +80,16 @@ class RequestConfiguration extends SyliusRequestConfiguration
         }
 
         return (bool) $redirect['header'];
+    }
+
+    public function getParents()
+    {
+        $parameters = $this->getParameters();
+
+        if (!$parameters->has('parents')) {
+            return null;
+        }
+
+        return $parameters->get('parents');
     }
 }

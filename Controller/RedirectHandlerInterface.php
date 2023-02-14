@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Owl\Bridge\SyliusResourceBridge\Controller;
+namespace Owl\Bridge\SyliusResource\Controller;
 
 use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface as SyliusRedirectHandlerInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;

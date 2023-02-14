@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Owl\Bridge\SyliusResourceBridge\Controller;
+namespace Owl\Bridge\SyliusResource\Controller;
 
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration as SyliusRequestConfiguration;
-use Owl\Bridge\SyliusResourceBridge\Controller\RequestConfiguration;
+use Owl\Bridge\SyliusResource\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\ResourceActions;

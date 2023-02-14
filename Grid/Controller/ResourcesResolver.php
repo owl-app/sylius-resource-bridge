@@ -1,29 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Owl\Bridge\SyliusResourceBridge\Grid\Controller;
+namespace Owl\Bridge\SyliusResource\Grid\Controller;
 
-use Doctrine\ORM\QueryBuilder;
-use Owl\Bridge\SyliusResourceBridge\Controller\CollectionEventDispatcherInterface;
-use Owl\Bridge\SyliusResourceBridge\Event\CollectionPreLoadEvent;
-use Sylius\Bundle\GridBundle\Doctrine\ORM\ExpressionBuilder;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Owl\Bridge\SyliusResource\Doctrine\Orm\CollectionProviderInterface;
 
 final class ResourcesResolver implements ResourcesResolverInterface
 {
-    /** @var ResourcesResolverInterface */
-    private $decoratedResolver;
-
-    private CollectionEventDispatcherInterface $eventDispatcher;
-
     public function __construct(
-        ResourcesResolverInterface $decoratedResolver,
-        CollectionEventDispatcherInterface $eventDispatcher
+        private ResourcesResolverInterface $decoratedResolver,
+        private CollectionProviderInterface $collectionProvider
     ) {
-        $this->decoratedResolver = $decoratedResolver;
-        $this->eventDispatcher = $eventDispatcher;
+
     }
 
     /**
@@ -36,8 +27,6 @@ final class ResourcesResolver implements ResourcesResolverInterface
         }
 
         $method = $requestConfiguration->getRepositoryMethod();
-        $metadata = $requestConfiguration->getMetadata();
-        $customEventName = sprintf('%s.%s.%s', $metadata->getApplicationName(), $metadata->getName(), CollectionPreLoadEvent::EVENT_NAME);
 
         if (null !== $method) {
             if (is_array($method) && 2 === count($method)) {
@@ -45,19 +34,12 @@ final class ResourcesResolver implements ResourcesResolverInterface
                 $method = $method[1];
             }
 
-            $arguments = array_values($requestConfiguration->getRepositoryArguments());
-            $permissionQueryBuilder = $repository->createQueryBuilder('o');
-            $expressionBuilder = new ExpressionBuilder($permissionQueryBuilder);
+            $repositoryOptions = [
+                'method' => $method,
+                'arguments' => array_values($requestConfiguration->getRepositoryArguments())
+            ];
 
-            $event = $this->eventDispatcher->dispatch(
-                $customEventName,
-                $requestConfiguration->getMetadata()->getClass('model'),
-                $expressionBuilder
-            );
-
-            $this->injectExpression($event->getExpressions(), $permissionQueryBuilder, $arguments);
-
-            return $repository->$method(...$arguments);
+            return $this->collectionProvider->get($repository, null, $repositoryOptions);
         }
 
         $criteria = [];
@@ -65,42 +47,11 @@ final class ResourcesResolver implements ResourcesResolverInterface
             $criteria = $requestConfiguration->getCriteria();
         }
 
-        $event = $this->eventDispatcher->dispatch(
-            $customEventName,
-            $requestConfiguration->getMetadata()->getClass('model')
-        );
-
-        $this->injectCriteria($event->getCriterias(), $criteria);
-
         $sorting = [];
         if ($requestConfiguration->isSortable()) {
             $sorting = $requestConfiguration->getSorting();
         }
 
-        if ($requestConfiguration->isPaginated()) {
-            return $repository->createPaginator($criteria, $sorting);
-        }
-
-        return $repository->findBy($criteria, $sorting, $requestConfiguration->getLimit());
-    }
-
-    private function injectExpression(array $expressions, QueryBuilder $queryBuilder, &$arguments): void
-    {
-        if($expressions) {
-            foreach($expressions as $expression) {
-                $queryBuilder->andWhere($expression);
-            }
-
-            array_push($arguments, $queryBuilder);
-        }
-    }
-
-    private function injectCriteria(array $eventCriterias, &$criterias): void
-    {
-        if($eventCriterias) {
-            foreach($eventCriterias as $criteria) {
-                $criterias = array_merge($criterias, $criteria);
-            }
-        }
+        return $this->collectionProvider->get($repository, $criteria, null, $sorting, $requestConfiguration->isPaginated());
     }
 }
