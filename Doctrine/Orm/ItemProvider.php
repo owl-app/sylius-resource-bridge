@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Owl\Bridge\SyliusResource\Doctrine\Orm;
 
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Owl\Bridge\SyliusResource\Filter\ResourceFilterApplicatorInterface;
+use Owl\Bridge\SyliusResource\Doctrine\Common\Applicator\ResourceFilterApplicatorInterface;
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Component\Resource\Model\ResourceInterface;
 

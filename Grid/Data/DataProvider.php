@@ -10,7 +10,7 @@ use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Filtering\FiltersApplicatorInterface;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Grid\Sorting\SorterInterface;
-use Owl\Bridge\SyliusResource\Filter\ResourceFilterApplicatorInterface;
+use Owl\Bridge\SyliusResource\Doctrine\Common\Applicator\ResourceFilterApplicatorInterface;
 
 final class DataProvider implements DataProviderInterface
 {
