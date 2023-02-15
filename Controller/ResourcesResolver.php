@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Owl\Bridge\SyliusResource\Grid\Controller;
+namespace Owl\Bridge\SyliusResource\Controller;
 
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface;
@@ -22,10 +22,6 @@ final class ResourcesResolver implements ResourcesResolverInterface
      */
     public function getResources(RequestConfiguration $requestConfiguration, RepositoryInterface $repository)
     {
-        if ($requestConfiguration->hasGrid()) {
-            return $this->decoratedResolver->getResources($requestConfiguration, $repository);
-        }
-
         $method = $requestConfiguration->getRepositoryMethod();
 
         if (null !== $method) {
