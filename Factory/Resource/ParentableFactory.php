@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Owl\Bridge\SyliusResource\Factory\Resource;
 
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Owl\Bridge\SyliusResource\Exception\ParetResourceNotFound;
 
 abstract class ParentableFactory implements ParentableFactoryInterface
 {
@@ -25,7 +26,7 @@ abstract class ParentableFactory implements ParentableFactoryInterface
     public function getResourceParents(string $name): ResourceInterface
     {
         if(!isset($this->resourceParents[$name])) {
-            throw \OutOfBoundsException(sprintf('Resource %s not found', $name));
+            throw new ParetResourceNotFound(sprintf('Resource %s not found', $name));
         }
 
         return $this->resourceParents[$name];

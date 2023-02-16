@@ -102,6 +102,34 @@ class BaseController extends ResourceController
         return $this->createRestView($configuration, $resource);
     }
 
+    public function indexAction(Request $request): Response
+    {
+        $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
+
+        $this->isGrantedOr403($configuration, ResourceActions::INDEX);
+        $resourceParents = $this->findParents($configuration);
+        $resources = $this->resourcesCollectionProvider->get($configuration, $this->repository);
+
+        $event = $this->eventDispatcher->dispatchMultiple(ResourceActions::INDEX, $configuration, $resources);
+        $eventResponse = $event->getResponse();
+        if (null !== $eventResponse) {
+            return $eventResponse;
+        }
+
+        if ($configuration->isHtmlRequest()) {
+            return $this->render($configuration->getTemplate(ResourceActions::INDEX . '.html'), 
+                array_merge([
+                    'configuration' => $configuration,
+                    'metadata' => $this->metadata,
+                    'resources' => $resources,
+                    $this->metadata->getPluralName() => $resources,
+                ], $resourceParents)
+            );
+        }
+
+        return $this->createRestView($configuration, $resources);
+    }
+
     public function createAction(Request $request): Response
     {
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
