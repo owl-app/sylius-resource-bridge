@@ -46,7 +46,7 @@ final class ItemProvider implements ItemProviderInterface
         return null;
     }
 
-    private function getCriteria(RepositoryInterface $repository, ?string $method, array $arguments, ?array $criteria): array
+    private function getCriteria(RepositoryInterface $repository, ?string $method, array $arguments, ?array $criteria):? array
     {
         if (!is_null($method) && ($method === 'findOneBy' || (!method_exists($repository, $method) && str_starts_with($method, 'findOneBy')))) {
             $identifier = $this->getIdentifierFieldName($repository);
