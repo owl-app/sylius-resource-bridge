@@ -56,7 +56,10 @@ final class QueryBuilderApplicator implements QueryBuilderApplicatorInterface
         }
     }
 
-    private function getClassMetadata(QueryBuilder $queryBuilder, string $resourceClass): ClassMetadata
+    /**
+     * @psalm-return \Doctrine\ORM\Mapping\ClassMetadata<object>
+     */
+    private function getClassMetadata(QueryBuilder $queryBuilder, string $resourceClass): \Doctrine\ORM\Mapping\ClassMetadata
     {
         return $queryBuilder->getEntityManager()->getClassMetadata($resourceClass);
     }

@@ -70,7 +70,7 @@ abstract class AbstractResourceAction implements AbstractResourceActionInterface
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    protected function isGrantedOr403(RequestConfiguration $configuration, $resource = null): void
+    protected function isGrantedOr403(RequestConfiguration $configuration, \Sylius\Component\Resource\Model\ResourceInterface|null $resource = null): void
     {
         if (!$configuration->hasPermission()) {
             return;

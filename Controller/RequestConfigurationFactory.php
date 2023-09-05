@@ -52,7 +52,7 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
         );
     }
 
-    private function getParameters(SyliusRequestConfiguration $configuration, Request $request)
+    private function getParameters(SyliusRequestConfiguration $configuration, Request $request): \Sylius\Bundle\ResourceBundle\Controller\Parameters
     {
         $action = $request->get('save_action', '');
         $url = '';
@@ -94,7 +94,12 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
         return $parameters;
     }
 
-    private function getRefereUrl(Request $request, SyliusRequestConfiguration $configuration, array $vars, string $action)
+    /**
+     * @return (array|mixed|null|string)[]
+     *
+     * @psalm-return array{url?: mixed, route?: mixed|null|string, parameters?: array<never, never>}
+     */
+    private function getRefereUrl(Request $request, SyliusRequestConfiguration $configuration, array $vars, string $action): array
     {
         $route = [];
         $session = $request->getSession();

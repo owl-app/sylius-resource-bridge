@@ -15,6 +15,11 @@ final class IsGrantedExpressionFunctionProvider implements ExpressionFunctionPro
     {
     }
 
+    /**
+     * @return ExpressionFunction[]
+     *
+     * @psalm-return list{ExpressionFunction}
+     */
     public function getFunctions(): array
     {
         return [

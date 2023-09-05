@@ -397,7 +397,7 @@ class BaseController extends ResourceController
         throw new InvalidResponseException('Event must be stopped');
     }
 
-    protected function createAjaxView(RequestConfiguration $configuration, $data = null, int $statusCode = null): Response
+    protected function createAjaxView(RequestConfiguration $configuration, \Sylius\Component\Resource\Model\ResourceInterface|null $data = null, int $statusCode = null): Response
     {
         if (null === $this->viewHandler) {
             throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
@@ -412,7 +412,10 @@ class BaseController extends ResourceController
         return $this->viewHandler->handle($configuration, $view);
     }
 
-    protected function getErrorMessages(FormInterface $form) 
+    /**
+     * @psalm-return array<int<0, max>|string, mixed>
+     */
+    protected function getErrorMessages(FormInterface $form): array 
     {
         $errors = array();
 
@@ -429,7 +432,7 @@ class BaseController extends ResourceController
         return $errors;
     }
 
-    protected function isGrantedOr403(SyliusRequestConfiguration $configuration, string $name, $resource = null): void
+    protected function isGrantedOr403(SyliusRequestConfiguration $configuration, string $name, \Sylius\Component\Resource\Model\ResourceInterface|null $resource = null): void
     {
         if (!$configuration->hasPermission()) {
             return;

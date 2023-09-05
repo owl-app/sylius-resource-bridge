@@ -94,6 +94,11 @@ final class RedirectHandler implements RedirectHandlerInterface
         return $this->redirect($configuration, (string) $configuration->getRedirectReferer());
     }
 
+    /**
+     * @return string[]
+     *
+     * @psalm-return array{'X-OWL-LOCATION': string}
+     */
     public function getRedirectHeaders(SyliusRequestConfiguration $configuration, ?ResourceInterface $resource): array
     {
         $url = '';
