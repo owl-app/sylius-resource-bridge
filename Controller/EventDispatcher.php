@@ -13,13 +13,10 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as SymfonyEventDi
 
 final class EventDispatcher implements EventDispatcherInterface
 {
-    private $decorated;
-
-    /** @var SymfonyEventDispatcherInterface */
-    private $eventDispatcher;
-
-    public function __construct($decorated, SymfonyEventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        private SyliusEventDispatcherInterface $decorated,
+        private SymfonyEventDispatcherInterface $eventDispatcher
+    ) {
         $this->decorated = $decorated;
         $this->eventDispatcher = $eventDispatcher;
     }
