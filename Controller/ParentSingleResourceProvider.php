@@ -6,7 +6,6 @@ namespace Owl\Bridge\SyliusResource\Controller;
 
 use LogicException;
 use Owl\Bridge\SyliusResource\Doctrine\Orm\ItemProviderInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Component\Registry\ServiceRegistry;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Metadata\Registry;

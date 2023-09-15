@@ -12,12 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ViewHandler implements ViewHandlerInterface
 {
-    private $decorated;
-
-    /** @var ConfigurableViewHandlerInterface */
-    private $restViewHandler;
-
-    public function __construct($decorated, ConfigurableViewHandlerInterface $restViewHandler)
+    public function __construct(private ViewHandlerInterface $decorated, private ConfigurableViewHandlerInterface $restViewHandler)
     {
         $this->decorated = $decorated;
         $this->restViewHandler = $restViewHandler;

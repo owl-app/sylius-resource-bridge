@@ -10,5 +10,5 @@ interface QueryBuilderApplicatorInterface
 {
     public function applyFilters(QueryBuilder $queryBuilder, string $resourceClass, array $criteria): void;
 
-    public function applySort(QueryBuilder $queryBuilder, string $resourceClass, array $criteria): void;
+    public function applySort(QueryBuilder $queryBuilder, string $resourceClass, array $sorting): void;
 }

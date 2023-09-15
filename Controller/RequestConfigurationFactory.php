@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Controller;
 
+use Sylius\Bundle\ResourceBundle\Controller\Parameters;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration as SyliusRequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\Routing\RouterInterface;
 
 final class RequestConfigurationFactory implements RequestConfigurationFactoryInterface
 {
-    private $decorated;
+    private RequestConfigurationFactoryInterface $decorated;
 
     /** @var RouterInterface */
     private $router;
@@ -39,11 +40,8 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
     public function create(MetadataInterface $metadata, Request $request): RequestConfiguration
     {
         $decoratedConfiguration = $this->decorated->create($metadata, $request);
-        $action = $request->get(
-            'save_route',
-            $decoratedConfiguration->getRouteName($request->get('save_action', '')),
-        );
 
+        /** @psalm-suppress UnsafeInstantiation */
         return new $this->configurationClass(
             $decoratedConfiguration->getMetadata(),
             $request,
@@ -51,9 +49,9 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
         );
     }
 
-    private function getParameters(SyliusRequestConfiguration $configuration, Request $request): \Sylius\Bundle\ResourceBundle\Controller\Parameters
+    private function getParameters(SyliusRequestConfiguration $configuration, Request $request): Parameters
     {
-        $action = $request->get('save_action', '');
+        $action = $request->request->get('save_action', '');
         $url = '';
         $parameters = $configuration->getParameters();
         $vars = $configuration->getVars();
@@ -80,7 +78,7 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
             if (isset($referer['url'])) {
                 $url = $referer['url'];
             } else {
-                $url = $this->router->generate($referer['route'], $referer['parameters']);
+                $url = $this->router->generate($referer['route'] ?? null, $referer['parameters'] ?? null);
             }
         } catch (RouteNotFoundException $e) {
             $url = $request->getRequestUri();

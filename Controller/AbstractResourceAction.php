@@ -86,7 +86,7 @@ abstract class AbstractResourceAction implements AbstractResourceActionInterface
 
         if ($event->isStopped()) {
             $eventResponse = $event->getResponse();
-            if (null !== $eventResponse && $eventResponse instanceof Response) {
+            if (null !== $eventResponse) {
                 return $eventResponse;
             }
 

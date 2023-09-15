@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Controller;
 
+use Doctrine\ORM\EntityRepository;
 use Owl\Bridge\SyliusResource\Doctrine\Orm\CollectionProviderInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface;
@@ -20,7 +21,7 @@ final class ResourcesResolver implements ResourcesResolverInterface
     /**
      * @psalm-suppress MissingReturnType
      */
-    public function getResources(RequestConfiguration $requestConfiguration, RepositoryInterface $repository)
+    public function getResources(RequestConfiguration $requestConfiguration, EntityRepository|RepositoryInterface $repository)
     {
         $method = $requestConfiguration->getRepositoryMethod();
 

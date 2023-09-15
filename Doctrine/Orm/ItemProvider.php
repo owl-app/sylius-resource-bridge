@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Doctrine\Orm;
 
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Owl\Bridge\SyliusResource\Doctrine\Common\Applicator\ResourceFilterApplicatorInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class ItemProvider implements ItemProviderInterface
 {
@@ -17,7 +17,7 @@ final class ItemProvider implements ItemProviderInterface
     ) {
     }
 
-    public function get(RepositoryInterface $repository, ?array $criteria = [], ?array $repositoryOptions = []): ?ResourceInterface
+    public function get(EntityRepository $repository, ?array $criteria = [], ?array $repositoryOptions = []): ?ResourceInterface
     {
         $method = $this->getMethod($repositoryOptions);
         $criteria = $this->getCriteria($repository, $method, $repositoryOptions['arguments'] ?? [], $criteria);
@@ -45,7 +45,7 @@ final class ItemProvider implements ItemProviderInterface
         return null;
     }
 
-    private function getCriteria(RepositoryInterface $repository, ?string $method, array $arguments, ?array $criteria): ? array
+    private function getCriteria(EntityRepository $repository, ?string $method, array $arguments, ?array $criteria): ? array
     {
         if (null !== $method && ($method === 'findOneBy' || (!method_exists($repository, $method) && str_starts_with($method, 'findOneBy')))) {
             $identifier = $this->getIdentifierFieldName($repository);
@@ -62,7 +62,7 @@ final class ItemProvider implements ItemProviderInterface
         return $criteria;
     }
 
-    private function getQueryBuilder(RepositoryInterface $repository, ?string $method, array $arguments): QueryBuilder
+    private function getQueryBuilder(EntityRepository $repository, ?string $method, array $arguments): QueryBuilder
     {
         if (null !== $method && $method !== 'findOneBy') {
             return $repository->$method($arguments);
@@ -71,7 +71,7 @@ final class ItemProvider implements ItemProviderInterface
         return $repository->createQueryBuilder('o');
     }
 
-    private function getIdentifierFieldName(RepositoryInterface $repository): string
+    private function getIdentifierFieldName(EntityRepository $repository): string
     {
         $entityManager = $repository->createQueryBuilder('o')->getEntityManager();
         $meta = $entityManager->getClassMetadata($repository->getClassName());

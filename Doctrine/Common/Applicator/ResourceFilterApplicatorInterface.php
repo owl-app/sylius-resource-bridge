@@ -9,5 +9,5 @@ use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
 interface ResourceFilterApplicatorInterface
 {
-    public function apply(ORMQueryBuilder|DBALQueryBuilder $repository, string $resourceClass, string $nameAction): void;
+    public function apply(ORMQueryBuilder|DBALQueryBuilder $queryBuilder, string $resourceClass, string $nameAction): void;
 }

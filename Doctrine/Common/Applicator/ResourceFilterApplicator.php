@@ -14,10 +14,10 @@ final class ResourceFilterApplicator implements ResourceFilterApplicatorInterfac
     {
     }
 
-    public function apply(ORMQueryBuilder|DBALQueryBuilder $queryBuilder, string $resourceClass, string $action): void
+    public function apply(ORMQueryBuilder|DBALQueryBuilder $queryBuilder, string $resourceClass, string $nameAction): void
     {
         foreach ($this->registryFilter->all() as $filter) {
-            if ($filter->support($resourceClass, $action)) {
+            if ($filter->support($resourceClass, $nameAction)) {
                 $filter->apply($queryBuilder, $resourceClass);
             }
         }

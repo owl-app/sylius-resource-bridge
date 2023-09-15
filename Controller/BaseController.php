@@ -8,7 +8,6 @@ use Doctrine\Persistence\ObjectManager;
 use FOS\RestBundle\View\View;
 use Owl\Bridge\SyliusResource\Exception\InvalidResponseException;
 use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
-use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration as SyliusRequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
@@ -25,6 +24,7 @@ use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\ResourceActions;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +35,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * @property AuthorizationCheckerInterface $authorizationChecker
  * @property EventDispatcherInterface $eventDispatcher
  * @property RedirectHandlerInterface $redirectHandler
+ * @property NewResourceFactoryInterface $newResourceFactory
  */
 class BaseController extends ResourceController
 {
@@ -387,7 +388,7 @@ class BaseController extends ResourceController
 
         if ($event->isStopped()) {
             $eventResponse = $event->getResponse();
-            if (null !== $eventResponse && $eventResponse instanceof Response) {
+            if (null !== $eventResponse) {
                 return $eventResponse;
             }
 
@@ -419,6 +420,7 @@ class BaseController extends ResourceController
     {
         $errors = [];
 
+        /** @var FormError $error */
         foreach ($form->getErrors() as $key => $error) {
             $errors[] = $error->getMessage();
         }
@@ -432,7 +434,7 @@ class BaseController extends ResourceController
         return $errors;
     }
 
-    protected function isGrantedOr403(SyliusRequestConfiguration $configuration, string $name, \Sylius\Component\Resource\Model\ResourceInterface|null $resource = null): void
+    protected function isGrantedOr403(SyliusRequestConfiguration $configuration, string $permission, \Sylius\Component\Resource\Model\ResourceInterface|null $resource = null): void
     {
         if (!$configuration->hasPermission()) {
             return;

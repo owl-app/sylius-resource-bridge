@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Owl\Bridge\SyliusResource\Grid\Data;
 
 use Owl\Bridge\SyliusResource\Doctrine\Common\Applicator\ResourceFilterApplicatorInterface;
+use Sylius\Bundle\GridBundle\Doctrine\DataSourceInterface;
+use Sylius\Bundle\GridBundle\Doctrine\DataSourceInterface as DoctrineDataSourceIntrface;
 use Sylius\Component\Grid\Data\DataProviderInterface;
 use Sylius\Component\Grid\Data\DataSourceProviderInterface;
 use Sylius\Component\Grid\Definition\Grid;
@@ -24,6 +26,7 @@ final class DataProvider implements DataProviderInterface
 
     public function getData(Grid $grid, Parameters $parameters)
     {
+        /** @var DataSourceInterface|DoctrineDataSourceIntrface $dataSource */
         $dataSource = $this->dataSourceProvider->getDataSource($grid, $parameters);
         $driverConfiguration = $grid->getDriverConfiguration();
 

@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Owl\Bridge\SyliusResource\Controller;
+namespace Owl\Bridge\SyliusResource\Doctrine\Orm\Resource;
 
+use Doctrine\ORM\EntityRepository;
 use Owl\Bridge\SyliusResource\Doctrine\Orm\ItemProviderInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
@@ -17,7 +18,7 @@ final class SingleResourceProvider implements SingleResourceProviderInterface
     ) {
     }
 
-    public function get(RequestConfiguration $requestConfiguration, RepositoryInterface $repository): ?ResourceInterface
+    public function get(RequestConfiguration $requestConfiguration, EntityRepository|RepositoryInterface $repository): ?ResourceInterface
     {
         $method = $requestConfiguration->getRepositoryMethod();
 
