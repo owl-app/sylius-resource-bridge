@@ -6,8 +6,8 @@ namespace Owl\Bridge\SyliusResource\ExpressionLanguage;
 
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class IsGrantedExpressionFunctionProvider implements ExpressionFunctionProviderInterface
 {
@@ -43,7 +43,7 @@ final class IsGrantedExpressionFunctionProvider implements ExpressionFunctionPro
                     }
 
                     return $result;
-                }
+                },
             ),
         ];
     }

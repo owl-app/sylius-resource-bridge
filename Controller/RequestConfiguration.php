@@ -12,7 +12,7 @@ class RequestConfiguration extends SyliusRequestConfiguration
     {
         $vars = $this->getVars();
 
-        if(isset($vars['form']['ajax'])) {
+        if (isset($vars['form']['ajax'])) {
             return $vars['form']['ajax'];
         }
 
@@ -23,7 +23,7 @@ class RequestConfiguration extends SyliusRequestConfiguration
     {
         $vars = $this->getVars();
 
-        if(isset($vars['serialization_groups'])) {
+        if (isset($vars['serialization_groups'])) {
             return $vars['serialization_groups'];
         }
 
@@ -34,8 +34,8 @@ class RequestConfiguration extends SyliusRequestConfiguration
     {
         $vars = $this->getVars();
 
-        if(isset($vars['form']['ajax_validation_event'])) {
-            return '.'.$vars['form']['ajax_validation_event'];
+        if (isset($vars['form']['ajax_validation_event'])) {
+            return '.' . $vars['form']['ajax_validation_event'];
         }
 
         return '';
@@ -67,7 +67,7 @@ class RequestConfiguration extends SyliusRequestConfiguration
     {
         $redirect = $this->getParameters()->get('redirect');
 
-        if(!$redirect) {
+        if (!$redirect) {
             $redirect = $this->getVars()['redirect'] ?? null;
         }
 

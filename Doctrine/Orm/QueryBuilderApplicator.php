@@ -4,15 +4,7 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Doctrine\Orm;
 
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration as SyliusRequestConfiguration;
-use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\ResourceActions;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Routing\RouterInterface;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\Mapping\ClassMetadata;
 
 final class QueryBuilderApplicator implements QueryBuilderApplicatorInterface
 {

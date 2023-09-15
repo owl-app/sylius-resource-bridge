@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Doctrine\Common\Applicator;
 
-use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
 interface ResourceFilterApplicatorInterface
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Doctrine\Orm\Filter;
 
-use Owl\Bridge\SyliusResource\Doctrine\Common\FilterInterface as BaseFilterInterface;
 use Doctrine\ORM\QueryBuilder;
+use Owl\Bridge\SyliusResource\Doctrine\Common\FilterInterface as BaseFilterInterface;
 
 interface FilterInterface extends BaseFilterInterface
 {

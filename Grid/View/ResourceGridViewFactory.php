@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Grid\View;
 
+use Owl\Bridge\SyliusResource\Doctrine\Orm\CollectionProviderInterface;
 use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Grid\View\ResourceGridView;
@@ -12,7 +13,6 @@ use Sylius\Component\Grid\Data\DataProviderInterface;
 use Sylius\Component\Grid\Definition\Grid;
 use Sylius\Component\Grid\Parameters;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Owl\Bridge\SyliusResource\Doctrine\Orm\CollectionProviderInterface;
 
 final class ResourceGridViewFactory implements ResourceGridViewFactoryInterface
 {
@@ -32,12 +32,12 @@ final class ResourceGridViewFactory implements ResourceGridViewFactoryInterface
         Grid $grid,
         Parameters $parameters,
         MetadataInterface $metadata,
-        RequestConfiguration $requestConfiguration
+        RequestConfiguration $requestConfiguration,
     ): ResourceGridView {
         $driverConfiguration = $grid->getDriverConfiguration();
         $request = $requestConfiguration->getRequest();
 
-        if(!isset($driverConfiguration['pre_load_event'])) {
+        if (!isset($driverConfiguration['pre_load_event'])) {
             $driverConfiguration['pre_load_event'] = CollectionProviderInterface::TYPE;
         }
 

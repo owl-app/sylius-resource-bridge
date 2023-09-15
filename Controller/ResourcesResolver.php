@@ -1,20 +1,20 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Controller;
 
+use Owl\Bridge\SyliusResource\Doctrine\Orm\CollectionProviderInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\ResourcesResolverInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Owl\Bridge\SyliusResource\Doctrine\Orm\CollectionProviderInterface;
 
 final class ResourcesResolver implements ResourcesResolverInterface
 {
     public function __construct(
         private ResourcesResolverInterface $decoratedResolver,
-        private CollectionProviderInterface $collectionProvider
+        private CollectionProviderInterface $collectionProvider,
     ) {
-
     }
 
     /**
@@ -32,7 +32,7 @@ final class ResourcesResolver implements ResourcesResolverInterface
 
             $repositoryOptions = [
                 'method' => $method,
-                'arguments' => array_values($requestConfiguration->getRepositoryArguments())
+                'arguments' => array_values($requestConfiguration->getRepositoryArguments()),
             ];
 
             return $this->collectionProvider->get($repository, null, $repositoryOptions);

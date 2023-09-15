@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Controller;
 
+use Owl\Bridge\SyliusResource\Doctrine\Orm\ItemProviderInterface;
+use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
-use Owl\Bridge\SyliusResource\Doctrine\Orm\ItemProviderInterface;
 
 final class SingleResourceProvider implements SingleResourceProviderInterface
 {
     public function __construct(
-        private ItemProviderInterface $itemProvider
+        private ItemProviderInterface $itemProvider,
     ) {
     }
 
@@ -29,7 +29,7 @@ final class SingleResourceProvider implements SingleResourceProviderInterface
 
             $repositoryOptions = [
                 'method' => $method,
-                'arguments' => array_values($requestConfiguration->getRepositoryArguments())
+                'arguments' => array_values($requestConfiguration->getRepositoryArguments()),
             ];
 
             return $this->itemProvider->get($repository, null, $repositoryOptions);

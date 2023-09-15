@@ -26,10 +26,10 @@ use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\ResourceActions;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @property AuthorizationCheckerInterface $authorizationChecker
@@ -58,7 +58,7 @@ class BaseController extends ResourceController
         ?StateMachineInterface $stateMachine,
         ResourceUpdateHandlerInterface $resourceUpdateHandler,
         ResourceDeleteHandlerInterface $resourceDeleteHandler,
-    ) { 
+    ) {
         $this->metadata = $metadata;
         $this->requestConfigurationFactory = $requestConfigurationFactory;
         $this->viewHandler = $viewHandler;
@@ -95,7 +95,7 @@ class BaseController extends ResourceController
                 'metadata' => $this->metadata,
                 'resource' => $resource,
                 $this->metadata->getName() => $resource,
-                'resourceParents' => $resourceParents
+                'resourceParents' => $resourceParents,
             ]);
         }
 
@@ -117,13 +117,14 @@ class BaseController extends ResourceController
         }
 
         if ($configuration->isHtmlRequest()) {
-            return $this->render($configuration->getTemplate(ResourceActions::INDEX . '.html'), 
+            return $this->render(
+                $configuration->getTemplate(ResourceActions::INDEX . '.html'),
                 array_merge([
                     'configuration' => $configuration,
                     'metadata' => $this->metadata,
                     'resources' => $resources,
                     $this->metadata->getPluralName() => $resources,
-                ], $resourceParents)
+                ], $resourceParents),
             );
         }
 
@@ -184,7 +185,7 @@ class BaseController extends ResourceController
             $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::CREATE, $configuration, $newResource);
 
             /** @var RequestConfiguration $configuration */
-            if($configuration->isAjaxRequest()) {
+            if ($configuration->isAjaxRequest()) {
                 return $this->createAjaxView($configuration, $newResource, Response::HTTP_OK);
             }
 
@@ -216,7 +217,7 @@ class BaseController extends ResourceController
             'resource' => $newResource,
             $this->metadata->getName() => $newResource,
             'form' => $form->createView(),
-            'resourceParents' => $resourceParents
+            'resourceParents' => $resourceParents,
         ]);
     }
 
@@ -242,9 +243,9 @@ class BaseController extends ResourceController
         }
 
         if (
-            in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true)
-            && $form->isSubmitted()
-            && $form->isValid()
+            in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true) &&
+            $form->isSubmitted() &&
+            $form->isValid()
         ) {
             $resource = $form->getData();
 
@@ -283,7 +284,7 @@ class BaseController extends ResourceController
             $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource);
 
             /** @var RequestConfiguration $configuration */
-            if($configuration->isAjaxRequest()) {
+            if ($configuration->isAjaxRequest()) {
                 return $this->createAjaxView($configuration, $resource, Response::HTTP_OK);
             }
 
@@ -319,7 +320,7 @@ class BaseController extends ResourceController
             'resource' => $resource,
             $this->metadata->getName() => $resource,
             'form' => $form->createView(),
-            'resourceParents' => $resourceParents
+            'resourceParents' => $resourceParents,
         ]);
     }
 
@@ -385,7 +386,6 @@ class BaseController extends ResourceController
         $event = $this->eventDispatcher->dispatchAjaxValidationEvent(self::AJAX_VALIDATION_EVENT, $configuration, $form);
 
         if ($event->isStopped()) {
-
             $eventResponse = $event->getResponse();
             if (null !== $eventResponse && $eventResponse instanceof Response) {
                 return $eventResponse;
@@ -403,7 +403,7 @@ class BaseController extends ResourceController
             throw new \LogicException('You can not use the "non-html" request if FriendsOfSymfony Rest Bundle is not available. Try running "composer require friendsofsymfony/rest-bundle".');
         }
 
-        $view = new View;
+        $view = new View();
         $view->setData($data ?? []);
         $view->setStatusCode($statusCode);
         $view->setFormat('json');
@@ -415,9 +415,9 @@ class BaseController extends ResourceController
     /**
      * @psalm-return array<int<0, max>|string, mixed>
      */
-    protected function getErrorMessages(FormInterface $form): array 
+    protected function getErrorMessages(FormInterface $form): array
     {
-        $errors = array();
+        $errors = [];
 
         foreach ($form->getErrors() as $key => $error) {
             $errors[] = $error->getMessage();
@@ -448,7 +448,7 @@ class BaseController extends ResourceController
         if (!$this->container->has('owl.resource_controller.parent_single_resource_provider')) {
             throw new \LogicException(sprintf(
                 'The %s is not registered in your application.',
-                'owl.resource_controller.parent_single_resource_provider'
+                'owl.resource_controller.parent_single_resource_provider',
             ));
         }
 

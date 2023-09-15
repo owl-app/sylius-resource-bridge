@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Controller;
 
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
-use Sylius\Component\Resource\Metadata\Registry;
-use Sylius\Component\Resource\Metadata\MetadataInterface;
-use Sylius\Component\Registry\ServiceRegistry;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use LogicException;
 use Owl\Bridge\SyliusResource\Doctrine\Orm\ItemProviderInterface;
+use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Component\Registry\ServiceRegistry;
+use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Component\Resource\Metadata\Registry;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class ParentSingleResourceProvider implements ParentSingleResourceProviderInterface
 {
     public function __construct(
         private Registry $resourceRegistry,
         private ServiceRegistry $resourceRepositoryRegistry,
-        private ItemProviderInterface $itemProvider
+        private ItemProviderInterface $itemProvider,
     ) {
-
     }
 
     /**
@@ -32,30 +31,30 @@ final class ParentSingleResourceProvider implements ParentSingleResourceProvider
         $resources = $requestConfiguration->getParents();
         $resourceParents = [];
 
-        if($resources) {
-            foreach($resources as $parentParams) {
+        if ($resources) {
+            foreach ($resources as $parentParams) {
                 $metadata = $this->getMetadata($parentParams);
                 $method = $this->getRepositoryParam($parentParams, 'method');
                 $arguments = $this->getRepositoryParam($parentParams, 'arguments');
                 $repository = $this->resourceRepositoryRegistry->get(
-                    sprintf('%s.%s', $metadata->getApplicationName(), $metadata->getName())
+                    sprintf('%s.%s', $metadata->getApplicationName(), $metadata->getName()),
                 );
 
                 $repositoryOptions = [
                     'method' => $method,
-                    'arguments' => $arguments
+                    'arguments' => $arguments,
                 ];
 
                 $resourceParent = $this->itemProvider->get($repository, null, $repositoryOptions);
 
-                if(!$resourceParent) {
+                if (!$resourceParent) {
                     throw new NotFoundHttpException(sprintf('The "%s" has not been found', $metadata->getHumanizedName()));
                 }
 
                 $resourceParents[$metadata->getName()] = $resourceParent;
             }
         }
-        
+
         return $resourceParents;
     }
 

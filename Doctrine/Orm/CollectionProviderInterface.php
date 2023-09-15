@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Doctrine\Orm;
 
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Pagerfanta\Pagerfanta;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 interface CollectionProviderInterface
 {

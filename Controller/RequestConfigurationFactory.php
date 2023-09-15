@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Controller;
 
-use Sylius\Bundle\ResourceBundle\Controller\ParametersParserInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration as SyliusRequestConfiguration;
-use Owl\Bridge\SyliusResource\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
 use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Sylius\Component\Resource\ResourceActions;
@@ -41,14 +39,15 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
     public function create(MetadataInterface $metadata, Request $request): RequestConfiguration
     {
         $decoratedConfiguration = $this->decorated->create($metadata, $request);
-        $action = $request->get('save_route', 
-            $decoratedConfiguration->getRouteName($request->get('save_action', ''))
+        $action = $request->get(
+            'save_route',
+            $decoratedConfiguration->getRouteName($request->get('save_action', '')),
         );
 
         return new $this->configurationClass(
             $decoratedConfiguration->getMetadata(),
             $request,
-            $this->getParameters($decoratedConfiguration, $request)
+            $this->getParameters($decoratedConfiguration, $request),
         );
     }
 
@@ -61,11 +60,11 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
         $route = ['header' => 'xhr'];
         $referer = $this->getRefereUrl($request, $configuration, $vars, $action);
 
-        if(!empty($action)) {
-            if($action === 'referer') {
+        if (!empty($action)) {
+            if ($action === 'referer') {
                 $route = array_merge($route, $referer);
             } else {
-                if(isset($vars['redirect'][$action])) {
+                if (isset($vars['redirect'][$action])) {
                     $redirectAction = $vars['redirect'][$action];
                     $route['url'] = $this->router->generate($redirectAction['route'], $redirectAction['parameters'] ?? []);
                     $route['hash'] = $redirectAction['hash'] ?? '';
@@ -74,11 +73,11 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
                 }
             }
 
-            $parameters->set('redirect',$route);
+            $parameters->set('redirect', $route);
         }
 
         try {
-            if(isset($referer['url'])) {
+            if (isset($referer['url'])) {
                 $url = $referer['url'];
             } else {
                 $url = $this->router->generate($referer['route'], $referer['parameters']);
@@ -88,14 +87,14 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
         }
 
         $parameters->set('vars', array_merge($vars, [
-            'referer_url' => $url
+            'referer_url' => $url,
         ]));
 
         return $parameters;
     }
 
     /**
-     * @return (array|mixed|null|string)[]
+     * @return (array|mixed|string|null)[]
      *
      * @psalm-return array{url?: mixed, route?: mixed|null|string, parameters?: array<never, never>}
      */
@@ -105,10 +104,9 @@ final class RequestConfigurationFactory implements RequestConfigurationFactoryIn
         $session = $request->getSession();
         $previousPath = $session->get('_previous_path');
 
-        if(empty($previousPath)) {
+        if (empty($previousPath)) {
             $route['route'] = $vars['redirect']['optional_referer'] ?? $configuration->getRedirectRoute(ResourceActions::INDEX);
             $route['parameters'] = [];
-            
         } else {
             $route['url'] = $session->get('_previous_path');
         }

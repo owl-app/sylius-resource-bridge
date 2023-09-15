@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Controller;
 
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Owl\Bridge\SyliusResource\Factory\Resource\ParentableFactoryInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Component\Resource\Factory\FactoryInterface;
-use Owl\Bridge\SyliusResource\Factory\Resource\ParentableFactoryInterface;
+use Sylius\Component\Resource\Model\ResourceInterface;
 
 final class NewResourceFactory implements NewResourceFactoryInterface
 {
     public function create(RequestConfiguration $requestConfiguration, FactoryInterface $factory, array $resourceParents = []): ResourceInterface
     {
-        if($factory instanceof ParentableFactoryInterface) {
+        if ($factory instanceof ParentableFactoryInterface) {
             $factory->setResourceParents($resourceParents);
         }
 

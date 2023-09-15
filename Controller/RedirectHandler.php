@@ -29,22 +29,22 @@ final class RedirectHandler implements RedirectHandlerInterface
     {
         $redirect = $configuration->getParameters()->get('redirect');
 
-        if(isset($redirect['url'])) {
+        if (isset($redirect['url'])) {
             return $this->redirect($configuration, $redirect['url']);
-        } else {
-            try {
-                return $this->redirectToRoute(
-                    $configuration,
-                    (string) $configuration->getRedirectRoute(ResourceActions::SHOW),
-                    $configuration->getRedirectParameters($resource)
-                );
-            } catch (RouteNotFoundException $exception) {
-                return $this->redirectToRoute(
-                    $configuration,
-                    (string) $configuration->getRedirectRoute(ResourceActions::INDEX),
-                    $configuration->getRedirectParameters($resource)
-                );
-            }
+        }
+
+        try {
+            return $this->redirectToRoute(
+                $configuration,
+                (string) $configuration->getRedirectRoute(ResourceActions::SHOW),
+                $configuration->getRedirectParameters($resource),
+            );
+        } catch (RouteNotFoundException $exception) {
+            return $this->redirectToRoute(
+                $configuration,
+                (string) $configuration->getRedirectRoute(ResourceActions::INDEX),
+                $configuration->getRedirectParameters($resource),
+            );
         }
     }
 
@@ -56,7 +56,7 @@ final class RedirectHandler implements RedirectHandlerInterface
         return $this->redirectToRoute(
             $configuration,
             (string) $configuration->getRedirectRoute('index'),
-            $configuration->getRedirectParameters($resource)
+            $configuration->getRedirectParameters($resource),
         );
     }
 
@@ -104,7 +104,7 @@ final class RedirectHandler implements RedirectHandlerInterface
         $url = '';
         $redirect = $configuration->getParameters()->get('redirect');
 
-        if(isset($redirect['url'])) {
+        if (isset($redirect['url'])) {
             $url = $redirect['url'];
         } else {
             $parameters = $resource ? $configuration->getRedirectParameters($resource) : [];
@@ -112,12 +112,12 @@ final class RedirectHandler implements RedirectHandlerInterface
             try {
                 $url = $this->router->generate(
                     (string) $configuration->getRedirectRoute(ResourceActions::SHOW),
-                    $parameters
+                    $parameters,
                 );
             } catch (RouteNotFoundException $exception) {
                 $url = $this->router->generate(
                     (string) $configuration->getRedirectRoute(ResourceActions::INDEX),
-                    $parameters
+                    $parameters,
                 );
             }
         }

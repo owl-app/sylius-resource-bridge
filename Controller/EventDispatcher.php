@@ -15,7 +15,7 @@ final class EventDispatcher implements EventDispatcherInterface
 {
     public function __construct(
         private SyliusEventDispatcherInterface $decorated,
-        private SymfonyEventDispatcherInterface $eventDispatcher
+        private SymfonyEventDispatcherInterface $eventDispatcher,
     ) {
         $this->decorated = $decorated;
         $this->eventDispatcher = $eventDispatcher;
@@ -24,7 +24,7 @@ final class EventDispatcher implements EventDispatcherInterface
     public function dispatch(
         string $eventName,
         SyliusRequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): ResourceControllerEvent {
         $eventName = $requestConfiguration->getEvent() ?: $eventName;
         $metadata = $requestConfiguration->getMetadata();
@@ -38,7 +38,7 @@ final class EventDispatcher implements EventDispatcherInterface
     public function dispatchMultiple(
         string $eventName,
         SyliusRequestConfiguration $requestConfiguration,
-        $resources
+        $resources,
     ): ResourceControllerEvent {
         return $this->decorated->dispatchMultiple($eventName, $requestConfiguration, $resources);
     }
@@ -46,7 +46,7 @@ final class EventDispatcher implements EventDispatcherInterface
     public function dispatchPreEvent(
         string $eventName,
         SyliusRequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): ResourceControllerEvent {
         return $this->decorated->dispatchPreEvent($eventName, $requestConfiguration, $resource);
     }
@@ -54,7 +54,7 @@ final class EventDispatcher implements EventDispatcherInterface
     public function dispatchPostEvent(
         string $eventName,
         SyliusRequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): ResourceControllerEvent {
         return $this->decorated->dispatchPostEvent($eventName, $requestConfiguration, $resource);
     }
@@ -62,7 +62,7 @@ final class EventDispatcher implements EventDispatcherInterface
     public function dispatchInitializeEvent(
         string $eventName,
         SyliusRequestConfiguration $requestConfiguration,
-        ResourceInterface $resource
+        ResourceInterface $resource,
     ): ResourceControllerEvent {
         return $this->decorated->dispatchInitializeEvent($eventName, $requestConfiguration, $resource);
     }
@@ -73,7 +73,7 @@ final class EventDispatcher implements EventDispatcherInterface
     public function dispatchAjaxValidationEvent(
         string $eventName,
         SyliusRequestConfiguration $requestConfiguration,
-        FormInterface $form
+        FormInterface $form,
     ): ResourceControllerEvent {
         $eventName = $eventName;
         $addtionalName = $requestConfiguration->getAjaxValidationEventName();

@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Owl\Bridge\SyliusResource\Controller;
 
-use Sylius\Component\Resource\Metadata\MetadataInterface;
 use Doctrine\Persistence\ObjectManager;
-use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Sylius\Component\Resource\Factory\FactoryInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Owl\Bridge\SyliusResource\Controller\AuthorizationCheckerInterface;
 use Owl\Bridge\SyliusResource\Exception\InvalidResponseException;
 use Sylius\Bundle\ResourceBundle\Controller\ControllerTrait;
+use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
+use Sylius\Component\Resource\Factory\FactoryInterface;
+use Sylius\Component\Resource\Metadata\MetadataInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 abstract class AbstractResourceAction implements AbstractResourceActionInterface
 {
@@ -56,17 +55,17 @@ abstract class AbstractResourceAction implements AbstractResourceActionInterface
     }
 
     public function setManager(ObjectManager $manager): void
-    { 
+    {
         $this->manager = $manager;
     }
 
     public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): void
-    { 
+    {
         $this->authorizationChecker = $authorizationChecker;
     }
 
     public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): void
-    { 
+    {
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -86,7 +85,6 @@ abstract class AbstractResourceAction implements AbstractResourceActionInterface
         $event = $this->eventDispatcher->dispatchAjaxValidationEvent(self::AJAX_VALIDATION_EVENT, $configuration, $form);
 
         if ($event->isStopped()) {
-
             $eventResponse = $event->getResponse();
             if (null !== $eventResponse && $eventResponse instanceof Response) {
                 return $eventResponse;
